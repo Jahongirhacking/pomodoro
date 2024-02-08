@@ -88,7 +88,7 @@ const Pomodoro = () => {
                     }
                     return t - 1;
                 });
-            }, 10);
+            }, 1000);
             setIsRunning(true);
             intervalIdRef.current = currentIntervalId;
         }
