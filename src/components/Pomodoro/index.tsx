@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import buttonClickSound from "../../assets/sounds/button-press.wav";
 import timerSound from "../../assets/sounds/kichen-timer.mp3";
 import tickingSound from "../../assets/sounds/ticking-slow.mp3";
+import lengthSound from "../../assets/sounds/up-down.mp3";
 
 const initialState: ITimer = {
     breakLength: 5,
@@ -96,21 +97,25 @@ const Pomodoro = () => {
 
     const decreaseBreak = () => {
         if (isRunning || breakLength <= 1) return;
+        playAudio(document.getElementById("length-sound") as HTMLAudioElement);
         setBreakLength(b => b - 1);
     };
 
     const increaseBreak = () => {
         if (isRunning || breakLength >= 60) return;
+        playAudio(document.getElementById("length-sound") as HTMLAudioElement);
         setBreakLength(b => b + 1);
     };
 
     const decreaseSession = () => {
         if (isRunning || sessionLength <= 1) return;
+        playAudio(document.getElementById("length-sound") as HTMLAudioElement);
         setSessionLength(s => s - 1);
     };
 
     const increaseSession = () => {
         if (isRunning || sessionLength >= 60) return;
+        playAudio(document.getElementById("length-sound") as HTMLAudioElement);
         setSessionLength(s => s + 1);
     };
 
@@ -161,7 +166,7 @@ const Pomodoro = () => {
 
                 {/* START STOP */}
                 <div className="timer-controls">
-                    <button id="start_stop" onClick={toggleSwitch}>
+                    <button id="start_stop" className={isRunning ? "active" : ""} onClick={toggleSwitch}>
                         {isRunning ? "Pause" : "Start"}
                     </button>
                     <button id="reset" onClick={reset}>
@@ -179,6 +184,10 @@ const Pomodoro = () => {
                 <audio
                     id="tick"
                     src={tickingSound}
+                />
+                <audio
+                    id="length-sound"
+                    src={lengthSound}
                 />
             </div>
             <span className="author">

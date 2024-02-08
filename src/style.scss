@@ -91,6 +91,22 @@
         cursor: pointer;
         border-radius: 3px;
         font-weight: 700;
+        box-shadow: 0px 7px 0 #ddd;
+        transition: box-shadow 0.4s ease, transform 0.4s ease;
+
+        &#reset {
+          transition: box-shadow 0.1s ease, transform 0.1s ease;
+        }
+
+        &#start_stop {
+          min-width: 90px;
+        }
+
+        &.active,
+        &:active {
+          box-shadow: 0px 3px 0 #ddd;
+          transform: translateY(4px);
+        }
       }
     }
 
