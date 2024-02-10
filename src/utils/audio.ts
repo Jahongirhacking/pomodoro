@@ -1,4 +1,5 @@
 export const playAudio = (audio: HTMLAudioElement) => {
+  audio.currentTime = 0;
   return audio.play();
 };
 

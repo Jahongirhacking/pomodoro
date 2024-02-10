@@ -1,7 +1,5 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import pomodoroLogo from "../../assets/pomodoro.png";
-import { ITimer } from "../../types/timer";
+import { IPomodoro } from "../../types/Pomodoro/timer";
 import secondsToClock from "../../utils/secondsToClock";
 import { playAudio, stopAudio } from "../../utils/audio";
 import { useEffect, useRef, useState } from "react";
@@ -10,8 +8,15 @@ import buttonClickSound from "../../assets/sounds/button-press.wav";
 import timerSound from "../../assets/sounds/kichen-timer.mp3";
 import tickingSound from "../../assets/sounds/ticking-slow.mp3";
 import lengthSound from "../../assets/sounds/up-down.mp3";
+// Components
+import Lengths from "../../components/Pomodoro/Lengths";
+import TimerControls from "../../components/Pomodoro/TimerControls";
+import Timer from "../../components/Pomodoro/Timer";
+// Contexts
+import LengthsContext from "../../contexts/Pomodoro/LengthsContext";
+import TimerControlsContext from "../../contexts/Pomodoro/TimerControlsContext";
 
-const initialState: ITimer = {
+const initialState: IPomodoro = {
     breakLength: 5,
     sessionLength: 25,
     status: "SESSION",
@@ -131,56 +136,28 @@ const Pomodoro = () => {
         <>
             <div className="pomodoro">
                 <img className="pomodoro__img" src={pomodoroLogo} alt="pomodoro-img" />
-                <div className="length">
-                    {/* BREAK */}
-                    <div className="length-control break">
-                        <div id="break-label">Break Length</div>
-                        <div className="control">
-                            <button id="break-decrement" onClick={decreaseBreak}>
-                                <FontAwesomeIcon icon={faChevronDown} />
-                            </button>
-                            <span id="break-length">{breakLength}</span>
-                            <button id="break-increment" onClick={increaseBreak}>
-                                <FontAwesomeIcon icon={faChevronUp} />
-                            </button>
-                        </div>
-                    </div>
 
-                    {/* SESSION */}
-                    <div className="length-control session">
-                        <div id="session-label">Session Length</div>
-                        <div className="control">
-                            <button id="session-decrement" onClick={decreaseSession}>
-                                <FontAwesomeIcon icon={faChevronDown} />
-                            </button>
-                            <span id="session-length">{sessionLength}</span>
-                            <button id="session-increment" onClick={increaseSession}>
-                                <FontAwesomeIcon icon={faChevronUp} />
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <LengthsContext.Provider value={{
+                    breakLength,
+                    sessionLength,
+                    decreaseBreak,
+                    increaseBreak,
+                    decreaseSession,
+                    increaseSession
+                }}>
+                    <Lengths />
+                </LengthsContext.Provider>
 
-                {/* TIMER */}
-                <div className="timer-container">
-                    <div id="timer-label">{status}</div>
-                    <h1
-                        id="time-left"
-                        className={timer <= 60 ? "alert" : ""}
-                    >
-                        {secondsToClock(timer)}
-                    </h1>
-                </div>
+                <Timer timer={timer} status={status} />
 
-                {/* START STOP */}
-                <div className="timer-controls">
-                    <button id="start_stop" className={isRunning ? "active" : ""} onClick={toggleSwitch}>
-                        {isRunning ? "Pause" : "Start"}
-                    </button>
-                    <button id="reset" onClick={reset}>
-                        Reset
-                    </button>
-                </div>
+                <TimerControlsContext.Provider value={{
+                    isRunning,
+                    toggleSwitch,
+                    reset
+                }}>
+                    <TimerControls />
+                </TimerControlsContext.Provider>
+
                 <audio
                     id="beep"
                     src={timerSound}
