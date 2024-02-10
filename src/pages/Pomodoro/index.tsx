@@ -16,6 +16,8 @@ import Timer from "../../components/Pomodoro/Timer";
 import LengthsContext from "../../contexts/Pomodoro/LengthsContext";
 import TimerControlsContext from "../../contexts/Pomodoro/TimerControlsContext";
 
+import "./style.scss";
+
 const initialState: IPomodoro = {
     breakLength: 5,
     sessionLength: 25,
@@ -35,7 +37,7 @@ const Pomodoro = () => {
 
 
     useEffect(() => {
-        document.title = `${status} - ${secondsToClock(timer)}`
+        document.title = `${secondsToClock(timer)} - ${status.charAt(0)}${status.slice(1).toLowerCase()}`
     }, [timer, status])
 
     useEffect(() => {

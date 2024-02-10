@@ -1,0 +1,43 @@
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  font-size: 14pt;
+  width: 98%;
+  max-width: 500px;
+  header {
+    h2 {
+      font-weight: 400;
+      font-size: 15pt;
+      text-align: center;
+      span {
+        color: rgba(255, 255, 255, 0.6);
+      }
+    }
+    .list-head {
+      padding: 10px 5px;
+      border-bottom: 2px solid white;
+      font-weight: 700;
+    }
+  }
+  .add-task-btn {
+    color: inherit;
+    background-color: rgba(0, 0, 0, 0.1);
+    font-size: inherit;
+    font-weight: 600;
+    padding: 20px 0;
+    border: 2px dashed rgba(255, 255, 255, 0.4);
+    border-radius: 8px;
+    opacity: 0.7;
+    transition: opacity 0.2s ease-in-out;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    .fa-plus {
+      margin-right: 5px;
+    }
+  }
+}
