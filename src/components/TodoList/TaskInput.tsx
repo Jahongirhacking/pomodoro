@@ -13,21 +13,33 @@ const TaskInput = () => {
 
     useEffect(() => {
         if (inputRef.current) inputRef.current.focus();
-
         document.addEventListener("click", handleCancel);
-
         return () => {
             document.removeEventListener("click", handleCancel);
         }
     }, [handleCancel])
 
-
-    const handleSave = () => {
+    const handleSave = useCallback(() => {
+        const input = inputRef.current!.value.trim();
+        if (!input) return;
         dispatch(addTodo({
-            name: inputRef.current!.value,
+            name: input,
             note: textareaRef.current!.value
         }))
-    }
+    }, [dispatch])
+
+    const handleKeyboard = useCallback((e: KeyboardEvent) => {
+        const [key, ctrl] = [e.key, e.ctrlKey];
+        console.log(key, ctrl)
+        if (key === "Enter" && ctrl) handleSave();
+    }, [handleSave])
+
+    useEffect(() => {
+        document.addEventListener("keyup", handleKeyboard)
+        return () => {
+            document.removeEventListener("keyup", handleKeyboard)
+        }
+    }, [handleSave, handleKeyboard])
 
     return (
         <form
