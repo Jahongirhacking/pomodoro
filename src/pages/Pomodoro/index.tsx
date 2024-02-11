@@ -103,7 +103,7 @@ const Pomodoro = () => {
                 playAudio(tickingAudio);
                 return t - 1;
             });
-        }, 100);
+        }, 1000);
         setIsRunning(true);
         intervalIdRef.current = currentIntervalId;
     }
