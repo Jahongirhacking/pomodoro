@@ -8,16 +8,8 @@ const TaskInput = () => {
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
     const handleCancel = useCallback(() => {
-        dispatch(setShowAddTaskButton(true))
+        dispatch(setShowAddTaskButton(true));
     }, [dispatch])
-
-    useEffect(() => {
-        if (inputRef.current) inputRef.current.focus();
-        document.addEventListener("click", handleCancel);
-        return () => {
-            document.removeEventListener("click", handleCancel);
-        }
-    }, [handleCancel])
 
     const handleSave = useCallback(() => {
         const input = inputRef.current!.value.trim();
@@ -28,11 +20,20 @@ const TaskInput = () => {
         }))
     }, [dispatch])
 
+    useEffect(() => {
+        if (inputRef.current) inputRef.current.focus();
+        document.addEventListener("click", handleCancel);
+        return () => {
+            document.removeEventListener("click", handleCancel);
+        }
+    }, [handleCancel])
+
+
     const handleKeyboard = useCallback((e: KeyboardEvent) => {
         const [key, ctrl] = [e.key, e.ctrlKey];
-        console.log(key, ctrl)
         if (key === "Enter" && ctrl) handleSave();
-    }, [handleSave])
+        if (key === "Escape") handleCancel();
+    }, [handleSave, handleCancel])
 
     useEffect(() => {
         document.addEventListener("keyup", handleKeyboard)
