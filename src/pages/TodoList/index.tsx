@@ -10,6 +10,8 @@ import DeleteListButtons from "../../components/TodoList/DeleteListButtons";
 const TodoList = () => {
     const { todos, activeTask, orderNumber } = useSelector((state: IStore) => state.todos)
     const { showAddTaskButton } = useSelector((state: IStore) => state.todos)
+    const completedTodos = todos.filter(todo => todo.completed);
+    const notCompletedTodos = todos.filter(todo => !todo.completed);
     return (
         <div className="todo-list">
             <header>
@@ -21,8 +23,8 @@ const TodoList = () => {
                     </MoreOptionButton>
                 </div>
             </header>
-            <TaskList todos={todos.filter(todo => !todo.completed)} />
-            <TaskList todos={todos.filter(todo => todo.completed)} />
+            {notCompletedTodos.length !== 0 && <TaskList todos={notCompletedTodos} />}
+            {completedTodos.length !== 0 && <TaskList todos={completedTodos} />}
             {showAddTaskButton ? <AddTaskButton /> : <TaskInput />}
         </div>
     )
