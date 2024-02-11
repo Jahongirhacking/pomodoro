@@ -58,7 +58,11 @@ const Pomodoro = () => {
     }, [status, breakLength, sessionLength])
 
     useEffect(() => {
-        document.getElementById("root")!.classList.toggle("break");
+        if (status === "BREAK") {
+            document.getElementById("root")!.classList.add("break");
+        } else {
+            document.getElementById("root")!.classList.remove("break");
+        }
     }, [status])
 
     const toggleStatus = () => {
