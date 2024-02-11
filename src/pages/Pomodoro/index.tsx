@@ -1,8 +1,10 @@
+import { useCallback, useEffect, useRef, useState } from "react";
 import pomodoroLogo from "../../assets/pomodoro.png";
-import { IPomodoro } from "../../types/Pomodoro/timer";
+// Utils
 import secondsToClock from "../../utils/secondsToClock";
 import { playAudio, stopAudio } from "../../utils/audio";
-import { useEffect, useRef, useState } from "react";
+// Types
+import { IPomodoro } from "../../types/Pomodoro/timer";
 // Sounds
 import buttonClickSound from "../../assets/sounds/button-press.wav";
 import timerSound from "../../assets/sounds/kichen-timer.mp3";
@@ -18,9 +20,9 @@ import TimerControlsContext from "../../contexts/Pomodoro/TimerControlsContext";
 // Redux
 import { useDispatch, useSelector } from "react-redux";
 import { IStore } from "../../types/store";
-
-import "./style.scss";
 import { increaseOrderNumber } from "../../features/todo/todoSlice";
+// Styles
+import "./style.scss";
 
 const initialState: IPomodoro = {
     breakLength: 5,
@@ -49,9 +51,65 @@ const Pomodoro = () => {
         document.title = `${secondsToClock(timer)} - ${activeTask.name}`
     }, [timer, status, activeTask, isRunning, dispatch])
 
-    useEffect(() => {
+
+    const stopTimer = useCallback(() => {
+        if (intervalIdRef.current) {
+            clearInterval(intervalIdRef.current);
+            intervalIdRef.current = null;
+        }
+        setIsRunning(false);
+        stopAllSounds()
         document.title = DEFAULT_TITLE;
     }, [])
+
+    const runTimer = useCallback(() => {
+        const timerAudio = document.getElementById("beep") as HTMLAudioElement;
+        const tickingAudio = document.getElementById("tick") as HTMLAudioElement;
+        tickingAudio.volume = 0.3;
+        const currentIntervalId = setInterval(() => {
+            setTimer(t => {
+                if (t === 0) {
+                    playAudio(timerAudio);
+                    toggleStatus();
+                    return t;
+                }
+                playAudio(tickingAudio);
+                return t - 1;
+            });
+        }, 1000);
+        setIsRunning(true);
+        intervalIdRef.current = currentIntervalId;
+    }, [])
+
+    const reset = useCallback(() => {
+        playButtonClickSound();
+        stopTimer();
+        // Initial Values
+        setBreakLength(initialState.breakLength);
+        setSessionLength(initialState.sessionLength);
+        setStatus(initialState.status);
+        setTimer(initialState.timer);
+    }, [stopTimer]);
+
+    const toggleSwitch = useCallback(() => {
+        playButtonClickSound();
+        if (intervalIdRef.current) stopTimer();
+        else runTimer();
+    }, [stopTimer, runTimer]);
+
+    const handleKeyboard = useCallback((e: KeyboardEvent) => {
+        const [key, ctrl] = [e.key, e.ctrlKey];
+        if (key === " " && ctrl) reset();
+        else if (key === " ") toggleSwitch();
+    }, [reset, toggleSwitch])
+
+    useEffect(() => {
+        document.title = DEFAULT_TITLE;
+        document.addEventListener("keyup", handleKeyboard)
+        return () => {
+            document.removeEventListener("keyup", handleKeyboard)
+        }
+    }, [handleKeyboard])
 
     useEffect(() => {
         setTimer((status === "BREAK" ? breakLength : sessionLength) * 60);
@@ -82,52 +140,6 @@ const Pomodoro = () => {
         stopAudio(tickingAudio)
         stopAudio(timerAudio);
     }
-
-    const stopTimer = () => {
-        if (intervalIdRef.current) {
-            clearInterval(intervalIdRef.current);
-            intervalIdRef.current = null;
-        }
-        setIsRunning(false);
-        stopAllSounds()
-        document.title = DEFAULT_TITLE;
-    }
-
-    const runTimer = () => {
-        const timerAudio = document.getElementById("beep") as HTMLAudioElement;
-        const tickingAudio = document.getElementById("tick") as HTMLAudioElement;
-        tickingAudio.volume = 0.3;
-        const currentIntervalId = setInterval(() => {
-            setTimer(t => {
-                if (t === 0) {
-                    playAudio(timerAudio);
-                    toggleStatus();
-                    return t;
-                }
-                playAudio(tickingAudio);
-                return t - 1;
-            });
-        }, 1000);
-        setIsRunning(true);
-        intervalIdRef.current = currentIntervalId;
-    }
-
-    const reset = () => {
-        playButtonClickSound();
-        stopTimer();
-        // Initial Values
-        setBreakLength(initialState.breakLength);
-        setSessionLength(initialState.sessionLength);
-        setStatus(initialState.status);
-        setTimer(initialState.timer);
-    };
-
-
-    const toggleSwitch = () => {
-        playButtonClickSound();
-        if (intervalIdRef.current) stopTimer();
-        else runTimer();
-    };
 
     const decreaseBreak = () => {
         if (isRunning || breakLength <= 1) return;

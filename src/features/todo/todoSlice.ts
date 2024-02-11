@@ -3,6 +3,7 @@ import { IActiveTask, ITodo, ITodoState } from "../../types/TodoList/todo";
 import { v4 as uuidv4 } from "uuid";
 
 const DEFAULT_ACTIVE_NAME = "Time to focus!";
+const LOCAL_STORAGE_NAME = "todo_list";
 
 const initialState: ITodoState = {
   todos: [],
@@ -16,7 +17,14 @@ const initialState: ITodoState = {
 
 const todoSlice = createSlice({
   name: "TodoList",
-  initialState,
+  initialState: localStorage.getItem(LOCAL_STORAGE_NAME)
+    ? {
+        ...(JSON.parse(
+          localStorage.getItem(LOCAL_STORAGE_NAME)!
+        ) as ITodoState),
+        orderNumber: 1,
+      }
+    : initialState,
   reducers: {
     setShowAddTaskButton: (state, action: { payload: boolean }) => {
       return { ...state, showAddTaskButton: action.payload };
@@ -39,25 +47,31 @@ const todoSlice = createSlice({
             ? DEFAULT_ACTIVE_NAME
             : notCompletedTodos[0].name,
       };
-      return {
+      const newState = {
         ...state,
         todos,
         activeTask,
       };
+      localStorage.setItem(LOCAL_STORAGE_NAME, JSON.stringify(newState));
+      return newState;
     },
 
     setActiveTask: (state, action: { payload: IActiveTask }) => {
-      return {
+      const newState = {
         ...state,
         activeTask: action.payload,
       };
+      localStorage.setItem(LOCAL_STORAGE_NAME, JSON.stringify(newState));
+      return newState;
     },
 
     increaseOrderNumber: (state) => {
-      return {
+      const newState = {
         ...state,
         orderNumber: state.orderNumber + 1,
       };
+      localStorage.setItem(LOCAL_STORAGE_NAME, JSON.stringify(newState));
+      return newState;
     },
 
     addTodo: (state, action) => {
@@ -66,7 +80,8 @@ const todoSlice = createSlice({
         completed: false,
         _id: uuidv4(),
       };
-      return {
+
+      const newState = {
         ...state,
         todos: [...state.todos, { ...currentTodo }],
         showAddTaskButton: true,
@@ -75,6 +90,8 @@ const todoSlice = createSlice({
             ? { _id: currentTodo._id, name: currentTodo.name }
             : state.activeTask,
       };
+      localStorage.setItem(LOCAL_STORAGE_NAME, JSON.stringify(newState));
+      return newState;
     },
 
     deleteTodo: (state, action: { payload: string }) => {
@@ -87,12 +104,13 @@ const todoSlice = createSlice({
             ? DEFAULT_ACTIVE_NAME
             : notCompletedTodos[0].name,
       };
-
-      return {
+      const newState = {
         ...state,
         todos,
         activeTask,
       };
+      localStorage.setItem(LOCAL_STORAGE_NAME, JSON.stringify(newState));
+      return newState;
     },
 
     clearFinishedTasks: (state) => {
@@ -101,15 +119,17 @@ const todoSlice = createSlice({
         _id: todos.length === 0 ? null : state.activeTask._id,
         name: todos.length === 0 ? DEFAULT_ACTIVE_NAME : state.activeTask.name,
       };
-      return {
+      const newState = {
         ...state,
         activeTask,
         todos,
       };
+      localStorage.setItem(LOCAL_STORAGE_NAME, JSON.stringify(newState));
+      return newState;
     },
 
     clearAllTasks: (state) => {
-      return {
+      const newState = {
         ...state,
         todos: [],
         activeTask: {
@@ -117,6 +137,8 @@ const todoSlice = createSlice({
           name: DEFAULT_ACTIVE_NAME,
         },
       };
+      localStorage.setItem(LOCAL_STORAGE_NAME, JSON.stringify(newState));
+      return newState;
     },
   },
 });
