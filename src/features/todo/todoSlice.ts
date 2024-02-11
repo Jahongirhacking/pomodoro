@@ -32,7 +32,7 @@ const todoSlice = createSlice({
       const targetTodo = todos.find((todo) => todo._id === action.payload);
       targetTodo!.completed = !targetTodo!.completed;
       const notCompletedTodos = todos.filter((todo) => !todo.completed);
-      const activeTask = {
+      const activeTask: IActiveTask = {
         _id: notCompletedTodos.length === 0 ? null : notCompletedTodos[0]._id,
         name:
           notCompletedTodos.length === 0
@@ -94,6 +94,30 @@ const todoSlice = createSlice({
         activeTask,
       };
     },
+
+    clearFinishedTasks: (state) => {
+      const todos = state.todos.filter((todo) => !todo.completed);
+      const activeTask: IActiveTask = {
+        _id: todos.length === 0 ? null : state.activeTask._id,
+        name: todos.length === 0 ? DEFAULT_ACTIVE_NAME : state.activeTask.name,
+      };
+      return {
+        ...state,
+        activeTask,
+        todos,
+      };
+    },
+
+    clearAllTasks: (state) => {
+      return {
+        ...state,
+        todos: [],
+        activeTask: {
+          _id: null,
+          name: DEFAULT_ACTIVE_NAME,
+        },
+      };
+    },
   },
 });
 
@@ -104,6 +128,8 @@ export const {
   increaseOrderNumber,
   addTodo,
   deleteTodo,
+  clearAllTasks,
+  clearFinishedTasks,
 } = todoSlice.actions;
 
 export default todoSlice.reducer;

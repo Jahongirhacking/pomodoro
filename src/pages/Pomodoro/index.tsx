@@ -57,6 +57,10 @@ const Pomodoro = () => {
         setTimer((status === "BREAK" ? breakLength : sessionLength) * 60);
     }, [status, breakLength, sessionLength])
 
+    useEffect(() => {
+        document.getElementById("root")!.classList.toggle("break");
+    }, [status])
+
     const toggleStatus = () => {
         setStatus((s) => {
             return s === "BREAK" ? "SESSION" : "BREAK"
@@ -99,7 +103,7 @@ const Pomodoro = () => {
                 playAudio(tickingAudio);
                 return t - 1;
             });
-        }, 1000);
+        }, 100);
         setIsRunning(true);
         intervalIdRef.current = currentIntervalId;
     }
