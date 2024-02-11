@@ -57,6 +57,10 @@ const Pomodoro = () => {
         setTimer((status === "BREAK" ? breakLength : sessionLength) * 60);
     }, [status, breakLength, sessionLength])
 
+    useEffect(() => {
+        document.getElementById("root")!.classList.toggle("break");
+    }, [status])
+
     const toggleStatus = () => {
         setStatus((s) => {
             return s === "BREAK" ? "SESSION" : "BREAK"

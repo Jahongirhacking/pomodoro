@@ -6,12 +6,13 @@ import { setShowAddTaskButton } from "../../features/todo/todoSlice";
 const AddTaskButton = () => {
     const dispatch = useDispatch();
 
-    const handleClick = () => {
+    const handleClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
         dispatch(setShowAddTaskButton(false))
     }
 
     return (
-        <button className="add-task-btn" onClick={handleClick}>
+        <button className="add-task-btn" onClick={(e) => handleClick(e)}>
             <FontAwesomeIcon icon={faPlusCircle} className="fa-plus" />
             Add Task
         </button>

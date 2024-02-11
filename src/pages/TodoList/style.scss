@@ -6,6 +6,12 @@
   width: 98%;
   max-width: 500px;
 
+  @mixin box-shadow {
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 10px 20px,
+      rgba(0, 0, 0, 0.1) 0px 3px 6px;
+  }
+
   header {
     h2 {
       font-weight: 400;
@@ -19,6 +25,54 @@
       padding: 10px 5px;
       border-bottom: 2px solid rgba(255, 255, 255, 0.6);
       font-weight: 700;
+      display: flex;
+
+      span.title {
+        flex: 1;
+      }
+
+      .elipsis-container {
+        padding: 3px 12px;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+        cursor: pointer;
+        position: relative;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .options {
+          width: 200px;
+          font-size: 10pt;
+          position: absolute;
+          top: 35px;
+          padding: 8px 15px;
+          right: 0;
+          z-index: 2;
+          border-radius: 4px;
+          display: flex;
+          flex-direction: column;
+          row-gap: 8px;
+          align-items: flex-start;
+          @include box-shadow;
+
+          .option {
+            padding: 3px;
+            width: 100%;
+            text-align: left;
+            color: rgb(79, 43, 45);
+            font-weight: 400;
+            background-color: transparent;
+            border: none;
+
+            svg {
+              margin-right: 7px;
+            }
+          }
+        }
+      }
     }
   }
 
@@ -40,6 +94,7 @@
       padding: 14px 22px;
       row-gap: 10px;
       transition: transform 0.6s ease;
+      @include box-shadow;
 
       &:hover {
         transform: scale(1.01);
@@ -107,15 +162,9 @@
         border-radius: 8px;
         box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 0px;
         background-color: rgb(252, 248, 222);
+        font-size: 12pt;
       }
     }
-  }
-
-  .task-item,
-  .task-form {
-    background-color: white;
-    box-shadow: rgba(0, 0, 0, 0.15) 0px 10px 20px,
-      rgba(0, 0, 0, 0.1) 0px 3px 6px;
   }
 
   .task-form {
@@ -123,6 +172,7 @@
     flex-direction: column;
     border-radius: 8px;
     overflow: hidden;
+    @include box-shadow;
 
     .form-body {
       display: flex;
