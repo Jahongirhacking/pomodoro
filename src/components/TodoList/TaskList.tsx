@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCircleCheck, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { setActiveTask, toggleCompleted } from '../../features/todo/todoSlice';
+import { deleteTodo, setActiveTask, toggleCompleted } from '../../features/todo/todoSlice';
 import { IStore } from '../../types/store';
 import { ITodo } from '../../types/TodoList/todo';
 
@@ -22,6 +22,11 @@ const TaskList = ({ todos }: IProps) => {
         dispatch(setActiveTask({ _id, name }));
     }
 
+    const handleDelete = (event: React.MouseEvent, _id: string) => {
+        event.stopPropagation();
+        dispatch(deleteTodo(_id))
+    }
+
     return (
         <ul className="task-list">
             {todos.map((todo) => (
@@ -40,6 +45,7 @@ const TaskList = ({ todos }: IProps) => {
                             icon={faCircleCheck}
                         />
                         <h3>{todo.name}</h3>
+                        <FontAwesomeIcon className='fa-trash' onClick={(e) => handleDelete(e, todo._id)} icon={faTrash} />
                     </div>
                     {todo.note && <p className="task__body">{todo.note}</p>}
                 </li>

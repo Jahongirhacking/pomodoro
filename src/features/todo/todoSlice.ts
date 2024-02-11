@@ -2,12 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 import { IActiveTask, ITodo, ITodoState } from "../../types/TodoList/todo";
 import { v4 as uuidv4 } from "uuid";
 
+const DEFAULT_ACTIVE_NAME = "Time to focus!";
+
 const initialState: ITodoState = {
   todos: [],
   showAddTaskButton: true,
   activeTask: {
     _id: null,
-    name: "Time to focus!",
+    name: DEFAULT_ACTIVE_NAME,
   },
   orderNumber: 1,
 };
@@ -21,10 +23,27 @@ const todoSlice = createSlice({
     },
 
     toggleCompleted: (state, action: { payload: string }) => {
-      const targetTodo = state.todos.find(
-        (todo) => todo._id === action.payload
-      );
+      const todos: ITodo[] = [...state.todos].map((todo) => ({
+        _id: todo._id,
+        name: todo.name,
+        note: todo.note,
+        completed: todo.completed,
+      }));
+      const targetTodo = todos.find((todo) => todo._id === action.payload);
       targetTodo!.completed = !targetTodo!.completed;
+      const notCompletedTodos = todos.filter((todo) => !todo.completed);
+      const activeTask = {
+        _id: notCompletedTodos.length === 0 ? null : notCompletedTodos[0]._id,
+        name:
+          notCompletedTodos.length === 0
+            ? DEFAULT_ACTIVE_NAME
+            : notCompletedTodos[0].name,
+      };
+      return {
+        ...state,
+        todos,
+        activeTask,
+      };
     },
 
     setActiveTask: (state, action: { payload: IActiveTask }) => {
@@ -57,6 +76,24 @@ const todoSlice = createSlice({
             : state.activeTask,
       };
     },
+
+    deleteTodo: (state, action: { payload: string }) => {
+      const todos = state.todos.filter((todo) => todo._id !== action.payload);
+      const notCompletedTodos = todos.filter((todo) => !todo.completed);
+      const activeTask = {
+        _id: notCompletedTodos.length === 0 ? null : notCompletedTodos[0]._id,
+        name:
+          notCompletedTodos.length === 0
+            ? DEFAULT_ACTIVE_NAME
+            : notCompletedTodos[0].name,
+      };
+
+      return {
+        ...state,
+        todos,
+        activeTask,
+      };
+    },
   },
 });
 
@@ -66,6 +103,7 @@ export const {
   setActiveTask,
   increaseOrderNumber,
   addTodo,
+  deleteTodo,
 } = todoSlice.actions;
 
 export default todoSlice.reducer;
