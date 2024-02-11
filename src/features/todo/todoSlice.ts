@@ -9,6 +9,7 @@ const initialState: ITodoState = {
     _id: null,
     name: "Time to focus!",
   },
+  orderNumber: 1,
 };
 
 const todoSlice = createSlice({
@@ -33,6 +34,13 @@ const todoSlice = createSlice({
       };
     },
 
+    increaseOrderNumber: (state) => {
+      return {
+        ...state,
+        orderNumber: state.orderNumber + 1,
+      };
+    },
+
     addTodo: (state, action) => {
       const currentTodo: ITodo = {
         ...action.payload,
@@ -52,7 +60,12 @@ const todoSlice = createSlice({
   },
 });
 
-export const { setShowAddTaskButton, toggleCompleted, setActiveTask, addTodo } =
-  todoSlice.actions;
+export const {
+  setShowAddTaskButton,
+  toggleCompleted,
+  setActiveTask,
+  increaseOrderNumber,
+  addTodo,
+} = todoSlice.actions;
 
 export default todoSlice.reducer;
