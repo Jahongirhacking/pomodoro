@@ -1,0 +1,113 @@
+.pomodoro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  row-gap: 20px;
+  background-color: #ffffff1a;
+  padding: 40px 25px;
+  border-radius: 8px;
+  box-shadow: 0 0 3px #ffffff2a;
+  position: relative;
+  font-family: "Cabin Sketch", sans-serif;
+
+  .pomodoro__img {
+    width: 80px;
+    position: absolute;
+    top: -48px;
+    left: 50%;
+    transform: translateX(-40px);
+    opacity: 0.8;
+  }
+
+  .length {
+    display: flex;
+    column-gap: 35px;
+    @media screen and (max-width: 450px) {
+      flex-direction: column;
+      row-gap: 20px;
+      order: 1;
+    }
+
+    .length-control {
+      display: flex;
+      flex-direction: column;
+      row-gap: 10px;
+      align-items: center;
+
+      .control {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+
+        button {
+          border: none;
+          color: white;
+          background-color: #ba4949;
+          font-size: 12pt;
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  .timer-controls {
+    display: flex;
+    column-gap: 15px;
+    @media screen and (max-width: 330px) {
+      flex-direction: column;
+      row-gap: 15px;
+    }
+
+    button {
+      color: #ba4949;
+      background-color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 3px;
+      font-weight: 700;
+      font-size: 24pt;
+      box-shadow: 0px 7px 0 #ddd;
+      transition: box-shadow 0.4s ease, transform 0.4s ease;
+      font-family: inherit;
+
+      @media screen and (max-width: 330px) {
+        font-size: 20pt;
+      }
+
+      &#reset {
+        transition: box-shadow 0.1s ease, transform 0.1s ease;
+      }
+
+      &#start_stop {
+        min-width: 103px;
+      }
+
+      &.active,
+      &:active {
+        box-shadow: 0px 3px 0 #ddd;
+        transform: translateY(4px);
+      }
+    }
+  }
+
+  #time-left {
+    font-size: 80pt;
+
+    @media screen and (max-width: 450px) {
+      font-size: 60pt;
+    }
+
+    @media screen and (max-width: 330px) {
+      font-size: 40pt;
+    }
+
+    &.alert {
+      color: red !important;
+    }
+  }
+}

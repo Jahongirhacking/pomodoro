@@ -1,129 +1,60 @@
 @import url("https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
 
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  font-family: "Cabin Sketch", sans-serif;
   user-select: none;
+  font-size: inherit;
+  font-family: inherit;
 }
 
-#root {
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  row-gap: 10px;
-  justify-content: center;
-  align-items: center;
-  background-color: #ba4949;
-  color: white;
-  font-size: 18pt;
-  padding: 60px 10px;
+button {
+  cursor: pointer;
+}
 
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    row-gap: 20px;
-    background-color: #ffffff1a;
-    padding: 40px 25px;
-    border-radius: 8px;
-    box-shadow: 0 0 3px #ffffff2a;
-    position: relative;
+li {
+  list-style: none;
+}
 
-    .pomodoro-img {
-      width: 80px;
-      position: absolute;
-      top: -48px;
-      left: 50%;
-      transform: translateX(-40px);
-      opacity: 0.8;
-    }
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
 
-    .length {
-      display: flex;
-      column-gap: 35px;
-      @media screen and (max-width: 400px) {
-        flex-direction: column;
-        row-gap: 20px;
-        order: 1;
-      }
-
-      .length-control {
-        display: flex;
-        flex-direction: column;
-        row-gap: 10px;
-        align-items: center;
-
-        .control {
-          display: flex;
-          gap: 10px;
-          align-items: center;
-
-          button {
-            border: none;
-            color: white;
-            background-color: #ba4949;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-          }
-        }
-      }
-    }
-
-    .timer-controls {
-      display: flex;
-      column-gap: 15px;
-      @media screen and (max-width: 250px) {
-        flex-direction: column;
-        row-gap: 10px;
-      }
-
-      button {
-        color: #ba4949;
-        background-color: white;
-        border: none;
-        padding: 5px 10px;
-        font-size: 20pt;
-        cursor: pointer;
-        border-radius: 3px;
-        font-weight: 700;
-        box-shadow: 0px 7px 0 #ddd;
-        transition: box-shadow 0.4s ease, transform 0.4s ease;
-
-        &#reset {
-          transition: box-shadow 0.1s ease, transform 0.1s ease;
-        }
-
-        &#start_stop {
-          min-width: 90px;
-        }
-
-        &.active,
-        &:active {
-          box-shadow: 0px 3px 0 #ddd;
-          transform: translateY(4px);
-        }
-      }
-    }
-
-    #time-left {
-      font-size: 50pt;
-
-      &.alert {
-        color: red !important;
-      }
-    }
+  &::-webkit-scrollbar {
+    width: 12px;
+    background-color: #ba4949;
   }
 
-  span.author {
-    font-size: 12pt;
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 3px;
+  }
 
-    a {
-      color: white;
+  #root {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    justify-content: center;
+    align-items: center;
+    background-color: #ba4949;
+    color: white;
+    font-size: 20pt;
+    padding: 80px 10px 40px;
+    font-family: "Roboto", sans-serif;
+
+    @media screen and (max-width: 310px) {
+      font-size: 18pt;
+    }
+
+    span.author {
+      font-size: 11pt;
+
+      a {
+        color: white;
+      }
     }
   }
 }

@@ -1,7 +1,6 @@
 export const playAudio = (audio: HTMLAudioElement) => {
-  audio.pause();
   audio.currentTime = 0;
-  audio.play();
+  return audio.play();
 };
 
 export const stopAudio = (audio: HTMLAudioElement) => {
