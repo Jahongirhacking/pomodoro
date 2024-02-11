@@ -4,12 +4,13 @@ import TimerControlsContext from "../../contexts/Pomodoro/TimerControlsContext";
 
 const TimerControls = () => {
     const { isRunning, toggleSwitch, reset } = useContext(TimerControlsContext) as IControlsWithSetters;
+
     return (
         <div className="timer-controls">
-            <button id="start_stop" className={isRunning ? "active" : ""} onClick={toggleSwitch}>
+            <button id="start_stop" className={isRunning ? "active" : ""} onClick={toggleSwitch} title="Press spacebar to start/pause">
                 {isRunning ? "Pause" : "Start"}
             </button>
-            <button id="reset" onClick={reset}>
+            <button id="reset" onClick={reset} title="Ctrl + Spacebar">
                 Reset
             </button>
         </div>

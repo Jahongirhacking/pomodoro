@@ -29,8 +29,8 @@ const TaskInput = () => {
                 <textarea className="task-note" ref={textareaRef} placeholder="If you have some notes..." />
             </div>
             <div className="form-btns">
-                <button type="button" className="cancel-btn" onClick={handleCancel}>Cancel</button>
-                <button type="button" className="save-btn" onClick={handleSave}>Save</button>
+                <button type="button" className="cancel-btn" onClick={handleCancel} title="Escape key">Cancel</button>
+                <button type="button" className="save-btn" onClick={handleSave} title="Ctrl + Enter">Save</button>
             </div>
         </form>
     )
