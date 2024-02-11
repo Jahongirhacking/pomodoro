@@ -39,6 +39,11 @@
       justify-content: center;
       padding: 14px 22px;
       row-gap: 10px;
+      transition: transform 0.6s ease;
+
+      &:hover {
+        transform: scale(1.01);
+      }
 
       &.completed {
         .task__head {

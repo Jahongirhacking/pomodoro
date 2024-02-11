@@ -15,8 +15,12 @@ import Timer from "../../components/Pomodoro/Timer";
 // Contexts
 import LengthsContext from "../../contexts/Pomodoro/LengthsContext";
 import TimerControlsContext from "../../contexts/Pomodoro/TimerControlsContext";
+// Redux
+import { useDispatch, useSelector } from "react-redux";
+import { IStore } from "../../types/store";
 
 import "./style.scss";
+import { increaseOrderNumber } from "../../features/todo/todoSlice";
 
 const initialState: IPomodoro = {
     breakLength: 5,
@@ -27,6 +31,8 @@ const initialState: IPomodoro = {
 };
 
 const Pomodoro = () => {
+    const dispatch = useDispatch();
+    const { activeTask } = useSelector((state: IStore) => state.todos)
     const [breakLength, setBreakLength] = useState<number>(initialState.breakLength);
     const [sessionLength, setSessionLength] = useState<number>(initialState.sessionLength);
     const [status, setStatus] = useState<"SESSION" | "BREAK">(initialState.status);
@@ -35,10 +41,13 @@ const Pomodoro = () => {
     const intervalIdRef = useRef<number | null>(null);
     const DEFAULT_TITLE = "Pomodoro 25+5 Web";
 
-
     useEffect(() => {
-        document.title = `${secondsToClock(timer)} - ${status.charAt(0)}${status.slice(1).toLowerCase()}`
-    }, [timer, status])
+        if (!isRunning) return;
+        if (status === "BREAK" && timer === 1) {
+            dispatch(increaseOrderNumber())
+        }
+        document.title = `${secondsToClock(timer)} - ${activeTask.name}`
+    }, [timer, status, activeTask, isRunning, dispatch])
 
     useEffect(() => {
         document.title = DEFAULT_TITLE;
@@ -49,7 +58,9 @@ const Pomodoro = () => {
     }, [status, breakLength, sessionLength])
 
     const toggleStatus = () => {
-        setStatus((s) => s === "BREAK" ? "SESSION" : "BREAK")
+        setStatus((s) => {
+            return s === "BREAK" ? "SESSION" : "BREAK"
+        })
     }
 
     const playButtonClickSound = () => {
@@ -88,7 +99,7 @@ const Pomodoro = () => {
                 playAudio(tickingAudio);
                 return t - 1;
             });
-        }, 1000);
+        }, 10);
         setIsRunning(true);
         intervalIdRef.current = currentIntervalId;
     }
