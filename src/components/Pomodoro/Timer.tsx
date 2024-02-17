@@ -1,7 +1,7 @@
 import { ITimer } from "../../types/Pomodoro/timer";
 import secondsToClock from "../../utils/secondsToClock";
 
-const Timer = ({ timer }: ITimer) => {
+const Timer = ({ timer, status }: ITimer) => {
     return (
         <div className="timer-container">
             <div id="timer-label">{status}</div>
