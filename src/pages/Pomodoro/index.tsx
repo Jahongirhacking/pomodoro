@@ -34,7 +34,7 @@ const initialState: IPomodoro = {
 
 const Pomodoro = () => {
     const dispatch = useDispatch();
-    const { activeTask } = useSelector((state: IStore) => state.todos)
+    const { activeTask, showAddTaskButton } = useSelector((state: IStore) => state.todos)
     const [breakLength, setBreakLength] = useState<number>(initialState.breakLength);
     const [sessionLength, setSessionLength] = useState<number>(initialState.sessionLength);
     const [status, setStatus] = useState<"SESSION" | "BREAK">(initialState.status);
@@ -99,9 +99,9 @@ const Pomodoro = () => {
 
     const handleKeyboard = useCallback((e: KeyboardEvent) => {
         const [key, ctrl] = [e.key, e.ctrlKey];
-        if (key === " " && ctrl) reset();
-        else if (key === " ") toggleSwitch();
-    }, [reset, toggleSwitch])
+        if (key === " " && ctrl && showAddTaskButton) reset();
+        else if (key === " " && showAddTaskButton) toggleSwitch();
+    }, [reset, toggleSwitch, showAddTaskButton])
 
     useEffect(() => {
         document.title = DEFAULT_TITLE;
